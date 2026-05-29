@@ -1,0 +1,40 @@
+name: Deploy to VPS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          cat > .env << 'EOF'
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          EOF
+
+      - name: Copy files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST_NPEPUB }}
+          username: ${{ secrets.NAME_NPEPUB }}
+          key: ${{ secrets.SSH_KEY_NPEPUB }}
+          source: "docker-compose.yml, .env, config/"
+          target: "/opt/app-docker/npepub"
+
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST_NPEPUB }}
+          username: ${{ secrets.NAME_NPEPUB }}
+          key: ${{ secrets.SSH_KEY_NPEPUB }}
+          script: |
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u woody-rn --password-stdin
+            cd /opt/app-docker/npepub
+            docker compose pull
+            docker compose up -d
