@@ -1,4 +1,16 @@
 services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: npepub-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+
   backend:
     image: ghcr.io/woody-rn/npepub-backend:latest
     container_name: npepub-backend
@@ -7,6 +19,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/npepub
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - db
 
   frontend:
     image: ghcr.io/woody-rn/npepub-frontend:latest
