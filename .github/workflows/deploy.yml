@@ -23,6 +23,7 @@ jobs:
         with:
           host: ${{ secrets.HOST_NPEPUB }}
           username: ${{ secrets.NAME_NPEPUB }}
+          port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY_NPEPUB }}
           source: "docker-compose.yml, .env, config/"
           target: "/opt/app-docker/npepub"
@@ -32,6 +33,7 @@ jobs:
         with:
           host: ${{ secrets.HOST_NPEPUB }}
           username: ${{ secrets.NAME_NPEPUB }}
+          port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY_NPEPUB }}
           script: |
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u woody-rn --password-stdin

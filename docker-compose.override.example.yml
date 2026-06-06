@@ -5,4 +5,8 @@ services:
 
   frontend:
     ports:
-      - "80:80"
+      - "5173:80"
+
+  db:
+    ports:
+      - "5432:5432"
