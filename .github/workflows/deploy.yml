@@ -16,6 +16,7 @@ jobs:
           cat > .env << 'EOF'
           DB_USERNAME=${{ secrets.DB_USERNAME }}
           DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
           EOF
 
       - name: Copy files to VPS
