@@ -39,5 +39,6 @@ jobs:
           script: |
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u woody-rn --password-stdin
             cd /opt/app-docker/npepub
+            docker compose down
             docker compose pull
             docker compose up -d
